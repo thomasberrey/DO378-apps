@@ -62,7 +62,7 @@ public class SolverResource implements SolverService {
             if (addMatcher.matches()) {
 
                 Float result = adderService.add(addMatcher.group(1), addMatcher.group(2));
-                TracerResolver.resolveTracer().activeSpan().setBaggageItem("answer", result + " = " + result);
+                TracerResolver.resolveTracer().activeSpan().setBaggageItem("answer", equation + " = " + result);
                 return result;
             
             }
@@ -70,7 +70,7 @@ public class SolverResource implements SolverService {
             if (multiplyMatcher.matches()) {
 
                 Float result = multiplierService.multiply(multiplyMatcher.group(1), multiplyMatcher.group(2));
-                TracerResolver.resolveTracer().activeSpan().setBaggageItem("answer", result + " = " + result);
+                TracerResolver.resolveTracer().activeSpan().setBaggageItem("answer", equation + " = " + result);
                 return result;
             
             } else {
