@@ -15,4 +15,9 @@ public interface SolverService {
     @Path("{equation}")
     @Produces(MediaType.TEXT_PLAIN)
     Float solve(@PathParam("equation") String equation);
+
+    @GET
+    @Path("{equation}/traceId")
+    @Produces(MediaType.TEXT_PLAIN)
+    String solveAndGetTraceId(@PathParam("equation") String equation);
 }

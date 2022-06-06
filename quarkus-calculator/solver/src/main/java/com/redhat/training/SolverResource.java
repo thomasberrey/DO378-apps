@@ -45,16 +45,6 @@ public class SolverResource implements SolverService {
     public Float solve(@PathParam("equation") String equation) {
         log.info("Solving '{}'", equation);
 
-        String traceId = "none";
-
-        final SpanContext spanContext = tracer.scopeManager().activeSpan().context();
-        if (spanContext instanceof JaegerSpanContext) {
-            traceId = ((JaegerSpanContext) spanContext).getTraceId();
-        }
-
-        TracerResolver.resolveTracer().activeSpan().setTag("traceId", traceId);
-        TracerResolver.resolveTracer().activeSpan().setTag("tagMessage", "this is an awesome message");
-
         try {
             return Float.valueOf(equation);
         } catch (NumberFormatException e) {
@@ -62,7 +52,6 @@ public class SolverResource implements SolverService {
             if (addMatcher.matches()) {
 
                 Float result = adderService.add(addMatcher.group(1), addMatcher.group(2));
-                TracerResolver.resolveTracer().activeSpan().setBaggageItem("answer", equation + " = " + result);
                 return result;
             
             }
@@ -70,7 +59,6 @@ public class SolverResource implements SolverService {
             if (multiplyMatcher.matches()) {
 
                 Float result = multiplierService.multiply(multiplyMatcher.group(1), multiplyMatcher.group(2));
-                TracerResolver.resolveTracer().activeSpan().setBaggageItem("answer", equation + " = " + result);
                 return result;
             
             } else {
@@ -80,4 +68,30 @@ public class SolverResource implements SolverService {
             }
         }
     }
+
+    @Override
+    @GET
+    @Path("{equation}")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String solveAndGetTraceId(@PathParam("equation") String equation) {
+        log.info("Solving '{}'", equation);
+
+        String traceId = "none";
+
+        final SpanContext spanContext = tracer.scopeManager().activeSpan().context();
+        if (spanContext instanceof JaegerSpanContext) {
+            traceId = ((JaegerSpanContext) spanContext).getTraceId();
+        }
+
+        TracerResolver.resolveTracer().activeSpan().setTag("traceId", traceId);
+        TracerResolver.resolveTracer().activeSpan().setTag("tagMessage", "this is an awesome message");
+        TracerResolver.resolveTracer().activeSpan().setBaggageItem("traceId", traceId);
+
+        String result = solve(equation).toString();
+
+        TracerResolver.resolveTracer().activeSpan().setBaggageItem("answer", equation + " = " + result);
+
+        return "traceId: " + traceId + ", " + result;
+    }
+
 }
