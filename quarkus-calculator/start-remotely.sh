@@ -1,5 +1,8 @@
 #!/bin/bash
 
+oc new-project calculator
+oc project calculator
+
 echo "Starting the 'solver' project "
 cd solver
 mvn package -Dquarkus.container-image.push=true
