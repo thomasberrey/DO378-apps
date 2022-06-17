@@ -20,3 +20,8 @@ cd multiplier
 mvn package -Dquarkus.container-image.push=true
 oc apply -f target/kubernetes/openshift.yml
 cd ..
+
+EQUATION="5"
+SOLVER_URL=`(oc get routes/solver | grep "^solver" | awk '{print $2}')`
+RESULT=`(http http://$SOLVER_URL/solver/$EQUATION)`
+echo "$EQUATION = $RESULT"
