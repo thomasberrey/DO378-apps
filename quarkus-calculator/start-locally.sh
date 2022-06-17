@@ -1,7 +1,5 @@
 #!/bin/sh
 
-cd ~/DO378/labs/apps-connect
-
 echo "Starting the 'solver' project "
 cd solver
 mvn quarkus:dev &
