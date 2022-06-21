@@ -24,7 +24,7 @@ oc delete -f target/kubernetes/openshift.yml
 oc apply -f target/kubernetes/openshift.yml
 cd ..
 
-sleep 10
+sleep 30
 
 EQUATION="5*4+3"
 SOLVER_ROUTE=$(oc get route solver -o template --template '{{ "http://" }}{{ .spec.host }}')
