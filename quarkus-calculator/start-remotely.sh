@@ -21,7 +21,7 @@ mvn package -Dquarkus.container-image.push=true
 oc apply -f target/kubernetes/openshift.yml
 cd ..
 
-EQUATION="5"
-SOLVER_URL=`(oc get routes/solver | grep "^solver" | awk '{print $2}')`
-RESULT=`(http http://$SOLVER_URL/solver/$EQUATION)`
+EQUATION="5*4+3"
+SOLVER_ROUTE=$(oc get route solver -o template --template '{{ "http://" }}{{ .spec.host }}')
+RESULT=`(http $SOLVER_ROUTE/solver/$EQUATION)`
 echo "$EQUATION = $RESULT"
