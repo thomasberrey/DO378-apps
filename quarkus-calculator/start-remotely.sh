@@ -3,6 +3,8 @@
 oc new-project calculator
 oc project calculator
 
+oc apply -f jaeger-resource.yml
+
 echo "Starting the 'adder' project "
 cd adder
 mvn package -Dquarkus.container-image.push=true
@@ -26,7 +28,7 @@ cd ..
 
 sleep 30
 
-EQUATION="5*4+3"
+EQUATION="5*4+3*2+1"
 SOLVER_ROUTE=$(oc get route solver -o template --template '{{ "http://" }}{{ .spec.host }}')
 RESULT=`(http $SOLVER_ROUTE/solver/$EQUATION)`
 echo "$EQUATION = $RESULT"
