@@ -7,6 +7,9 @@ oc delete all --all
 oc delete -f jaeger-resource.yml
 oc apply -f jaeger-resource.yml
 
+oc delete -f activemq-resource.yml
+oc apply -f activemq-resource.yml
+
 echo "Starting the 'adder' project "
 cd adder
 mvn package -Dquarkus.container-image.push=true
