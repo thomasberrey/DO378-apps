@@ -20,5 +20,5 @@ public interface SolverService {
     @GET
     @Path("{equation}/traceId")
     @Produces(MediaType.TEXT_PLAIN)
-    String solveAndGetTraceId(@PathParam("equation") String equation) throws JMSException;
+    String solveAndGetTraceId(@PathParam("equation") String equation);
 }
