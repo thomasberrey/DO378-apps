@@ -12,6 +12,7 @@ oc apply -f activemq-resource.yml
 
 echo "Starting the 'adder' project "
 cd adder
+mvn clean
 mvn package -Dquarkus.container-image.push=true
 oc delete -f target/kubernetes/openshift.yml
 oc apply -f target/kubernetes/openshift.yml
@@ -19,6 +20,7 @@ cd ..
 
 echo "Starting the 'multiplier' project "
 cd multiplier
+mvn clean
 mvn package -Dquarkus.container-image.push=true
 oc delete -f target/kubernetes/openshift.yml
 oc apply -f target/kubernetes/openshift.yml
