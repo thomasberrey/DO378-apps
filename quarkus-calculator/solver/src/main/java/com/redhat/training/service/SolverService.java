@@ -1,5 +1,6 @@
 package com.redhat.training.service;
 
+import javax.jms.JMSException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -19,5 +20,5 @@ public interface SolverService {
     @GET
     @Path("{equation}/traceId")
     @Produces(MediaType.TEXT_PLAIN)
-    String solveAndGetTraceId(@PathParam("equation") String equation);
+    String solveAndGetTraceId(@PathParam("equation") String equation) throws JMSException;
 }

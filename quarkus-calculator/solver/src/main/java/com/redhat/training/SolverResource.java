@@ -21,6 +21,16 @@ import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
 import io.smallrye.opentracing.contrib.resolver.TracerResolver;
 
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+
+import org.apache.qpid.jms.JmsConnectionFactory;
+
 public class SolverResource implements SolverService {
     final Logger log = LoggerFactory.getLogger(SolverResource.class);
 
@@ -73,7 +83,7 @@ public class SolverResource implements SolverService {
     @GET
     @Path("{equation}")
     @Produces(MediaType.TEXT_PLAIN)
-    public String solveAndGetTraceId(@PathParam("equation") String equation) {
+    public String solveAndGetTraceId(@PathParam("equation") String equation) throws JMSException {
         log.info("Solving '{}'", equation);
 
         String traceId = "none";
@@ -90,6 +100,32 @@ public class SolverResource implements SolverService {
         String result = solve(equation).toString();
 
         TracerResolver.resolveTracer().activeSpan().setBaggageItem("answer", equation + " = " + result);
+
+        Connection connection = null;
+        
+		try {
+
+			ConnectionFactory cf = new JmsConnectionFactory("amqp://activemq-hdls-svc:5672");
+
+			connection = cf.createConnection();
+
+			Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+
+			Queue queue = session.createQueue("exampleQueue");
+
+			MessageProducer producer = session.createProducer(queue);
+
+			TextMessage message = session.createTextMessage("traceId: " + traceId + ", " + result);
+
+			producer.send(message);
+
+			System.out.println("Sent message: " + message.getText());
+
+		} finally {
+			if (connection != null) {
+				connection.close();
+			}
+		}
 
         return "traceId: " + traceId + ", " + result;
     }

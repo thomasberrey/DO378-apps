@@ -17,6 +17,6 @@ spec:
     messageMigration: false
     persistenceEnabled: false
     requireLogin: false
-    size: 2
+    size: 1
     storage:
       size: 5Gi
