@@ -2,20 +2,21 @@ apiVersion: broker.amq.io/v1beta1
 kind: ActiveMQArtemis
 metadata:
   name: activemq
+  application: activemq
 spec:
-  deploymentPlan:
-    storage:
-      size: 5Gi
-    image: placeholder
-    size: 2
-    requireLogin: false
-    persistenceEnabled: true
-    journalType: nio
-    messageMigration: false
-    jolokiaAgentEnabled: false
-    managementRBACEnabled: true
-    clustered: true
+  adminPassword: admin
+  adminUser: admin
   console:
     expose: true
-  adminUser: admin
-  adminPassword: admin
+  deploymentPlan:
+    image: placeholder
+    jolokiaAgentEnabled: false
+    journalType: nio
+    managementRBACEnabled: true
+    clustered: true
+    messageMigration: false
+    persistenceEnabled: false
+    requireLogin: false
+    size: 2
+    storage:
+      size: 5Gi
