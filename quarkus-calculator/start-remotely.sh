@@ -33,10 +33,3 @@ mvn package -Dquarkus.container-image.push=true
 oc delete -f target/kubernetes/openshift.yml
 oc apply -f target/kubernetes/openshift.yml
 cd ..
-
-sleep 30
-
-EQUATION="5*4+3*2+1"
-SOLVER_ROUTE=$(oc get route solver -o template --template '{{ "http://" }}{{ .spec.host }}')
-RESULT=`(http $SOLVER_ROUTE/solver/$EQUATION/traceId)`
-echo "$EQUATION = $RESULT"
