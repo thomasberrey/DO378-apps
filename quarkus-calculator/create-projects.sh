@@ -2,7 +2,7 @@
 
 cd ~/DO378/labs/apps-connect
 
-echo "Creating the 'adder' project "
+echo "Creating the 'adder' project"
 mvn io.quarkus:quarkus-maven-plugin:1.3.4.Final-redhat-00004:create \
   -DprojectGroupId=com.redhat.training \
   -DprojectArtifactId=adder \
@@ -15,7 +15,7 @@ mvn io.quarkus:quarkus-maven-plugin:1.3.4.Final-redhat-00004:create \
 echo "Removing the test folder for the 'adder' project"
 rm -rf ./adder/src/test
 
-echo "Creating the 'multiplier' project "
+echo "Creating the 'multiplier' project"
 mvn io.quarkus:quarkus-maven-plugin:1.3.4.Final-redhat-00004:create \
   -DprojectGroupId=com.redhat.training \
   -DprojectArtifactId=multiplier \

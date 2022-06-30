@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Testing solver microservice "
+echo "Testing solver microservice"
 
 A=1
 B=2
