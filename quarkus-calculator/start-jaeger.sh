@@ -16,3 +16,5 @@ docker run --name jaeger \
   -p 14269:14269 \
   -p 9411:9411 \
   jaegertracing/all-in-one:latest
+
+# Connect to Jaeger at http://localhost:16686
