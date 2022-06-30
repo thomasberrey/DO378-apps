@@ -13,7 +13,7 @@ E=5
 while [ true ]
 do
   date
-  http "http $SOLVER_ROUTE/solver/$A*$B+$C*$D+$E/traceId"
+  curl "$SOLVER_ROUTE/solver/$A*$B+$C*$D+$E/traceId"
   A=$(( $A + 1 ))
   B=$(( $B + 1 ))
   C=$(( $C + 1 ))
