@@ -2,21 +2,21 @@
 
 echo "Starting the 'solver' project"
 cd solver
-mvn quarkus:dev &
+mvn clean quarkus:dev &
 SOLVER_PID=$!
 sleep 5
 cd ..
 
 echo "Starting the 'adder' project"
 cd adder
-mvn quarkus:dev &
+mvn clean quarkus:dev &
 ADDER_PID=$!
 sleep 5
 cd ..
 
 echo "Starting the 'multiplier' project"
 cd multiplier
-mvn quarkus:dev &
+mvn clean quarkus:dev &
 MULTIPLIER_PID=$!
 sleep 5
 cd ..

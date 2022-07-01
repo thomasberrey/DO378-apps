@@ -13,6 +13,7 @@ import com.redhat.training.service.AdderService;
 import com.redhat.training.service.MultiplierService;
 import com.redhat.training.service.SolverService;
 
+import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,8 +24,13 @@ import io.smallrye.opentracing.contrib.resolver.TracerResolver;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
+import javax.jms.JMSException;
 import javax.jms.JMSRuntimeException;
+import javax.jms.Message;
 import javax.jms.Session;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 
 public class SolverResource implements SolverService {
     final Logger log = LoggerFactory.getLogger(SolverResource.class);
@@ -74,9 +80,6 @@ public class SolverResource implements SolverService {
         }
     }
 
-    @Inject
-    ConnectionFactory connectionFactory;
-
     @Override
     @GET
     @Path("{equation}")
@@ -99,14 +102,34 @@ public class SolverResource implements SolverService {
 
         TracerResolver.resolveTracer().activeSpan().setBaggageItem("answer", equation + " = " + result);
 
+        String message = "traceId: " + traceId + ", " + result;
+        sendMessage(message);
+        receiveMessage();
+        return message;
+    }
+
+    @Inject
+    ConnectionFactory connectionFactory;
+
+    public void sendMessage(String message) {
         try (JMSContext context = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE)){
-            String message = "traceId: " + traceId + ", " + result;
             context.createProducer().send(context.createQueue("exampleQueue"), message);
         } catch (JMSRuntimeException ex) {
             // handle exception (details omitted)
         }
-
-        return "traceId: " + traceId + ", " + result;
     }
 
+    public void receiveMessage() {
+        try (JMSContext context = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE)) {
+            javax.jms.JMSConsumer consumer = context.createConsumer(context.createQueue("exampleQueue"));
+            Message message = consumer.receive();
+            if (message == null) {
+                return;
+            }
+            System.out.println(message);
+            message.acknowledge();
+        } catch (JMSException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
