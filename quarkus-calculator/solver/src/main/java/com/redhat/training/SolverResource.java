@@ -106,10 +106,14 @@ public class SolverResource implements SolverService {
 
     @Inject
     ConnectionFactory connectionFactory;
-
     public void sendMessage(String message) {
         try (JMSContext context = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE)){
             context.createProducer().send(context.createQueue("exampleQueue"), message);
+        } catch (JMSRuntimeException ex) {
+            // handle exception (details omitted)
+        }
+        try (JMSContext context = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE)){
+            context.createProducer().send(context.createTopic("exampleTopic"), message);
         } catch (JMSRuntimeException ex) {
             // handle exception (details omitted)
         }
@@ -118,6 +122,17 @@ public class SolverResource implements SolverService {
     public void receiveMessage() {
         try (JMSContext context = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE)) {
             javax.jms.JMSConsumer consumer = context.createConsumer(context.createQueue("exampleQueue"));
+            Message message = consumer.receive();
+            if (message == null) {
+                return;
+            }
+            System.out.println(message);
+            message.acknowledge();
+        } catch (JMSException e) {
+            throw new RuntimeException(e);
+        }
+        try (JMSContext context = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE)) {
+            javax.jms.JMSConsumer consumer = context.createConsumer(context.createTopic("exampleTopic"));
             Message message = consumer.receive();
             if (message == null) {
                 return;
