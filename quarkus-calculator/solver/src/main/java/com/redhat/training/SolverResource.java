@@ -13,7 +13,6 @@ import com.redhat.training.service.AdderService;
 import com.redhat.training.service.MultiplierService;
 import com.redhat.training.service.SolverService;
 
-import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,9 +27,6 @@ import javax.jms.JMSException;
 import javax.jms.JMSRuntimeException;
 import javax.jms.Message;
 import javax.jms.Session;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
 
 public class SolverResource implements SolverService {
     final Logger log = LoggerFactory.getLogger(SolverResource.class);
