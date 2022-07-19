@@ -13,10 +13,22 @@ import com.redhat.training.service.AdderService;
 import com.redhat.training.service.MultiplierService;
 import com.redhat.training.service.SolverService;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.jaegertracing.internal.JaegerSpanContext;
+import io.nats.client.Connection;
+import io.nats.client.JetStream;
+import io.nats.client.JetStreamSubscription;
+import io.nats.client.Message;
+import io.nats.client.Nats;
+import io.nats.client.PullSubscribeOptions;
+import io.nats.client.api.PublishAck;
+import io.nats.client.impl.NatsMessage;
 import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
 import io.smallrye.opentracing.contrib.resolver.TracerResolver;
@@ -25,7 +37,6 @@ import javax.jms.ConnectionFactory;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.JMSRuntimeException;
-import javax.jms.Message;
 import javax.jms.Session;
 
 public class SolverResource implements SolverService {
@@ -100,7 +111,10 @@ public class SolverResource implements SolverService {
 
         String message = "traceId: " + traceId + ", " + result;
         sendMessage(message);
-        receiveMessage();
+        // receiveMessage();
+
+        executeJetStreamConnection();
+
         return message;
     }
 
@@ -122,7 +136,7 @@ public class SolverResource implements SolverService {
     public void receiveMessage() {
         try (JMSContext context = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE)) {
             javax.jms.JMSConsumer consumer = context.createConsumer(context.createQueue("exampleQueue"));
-            Message message = consumer.receive();
+            javax.jms.Message message = consumer.receive();
             if (message == null) {
                 return;
             }
@@ -133,7 +147,7 @@ public class SolverResource implements SolverService {
         }
         try (JMSContext context = connectionFactory.createContext(Session.AUTO_ACKNOWLEDGE)) {
             javax.jms.JMSConsumer consumer = context.createConsumer(context.createTopic("exampleTopic"));
-            Message message = consumer.receive();
+            javax.jms.Message message = consumer.receive();
             if (message == null) {
                 return;
             }
@@ -141,6 +155,18 @@ public class SolverResource implements SolverService {
             message.acknowledge();
         } catch (JMSException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void executeJetStreamConnection() {
+        try {
+            Connection nc = Nats.connect("nats://localhost:4222");
+            JetStream js = nc.jetStream();
+            System.out.println("JetStream: " + js.toString());
+        }
+        catch (Exception ex) {
+        // handle exception (details omitted)
+        ex.printStackTrace();
         }
     }
 }
