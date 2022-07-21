@@ -1,8 +1,10 @@
 #!/bin/bash
 
 echo "Starting Jaeger"
-docker rm jaeger
-docker run --name jaeger \
+podman machine start
+podman stop jaeger
+podman rm jaeger
+podman run --name jaeger \
   -e COLLECTOR_ZIPKIN_HOST_PORT=:9411 \
   -e COLLECTOR_OTLP_ENABLED=true \
   -p 6831:6831/udp \
