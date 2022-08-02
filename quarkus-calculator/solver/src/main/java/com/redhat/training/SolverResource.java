@@ -160,7 +160,7 @@ public class SolverResource implements SolverService {
 
     public void executeJetStreamConnection() {
         try {
-            Connection nc = Nats.connect("nats://localhost:4222");
+            Connection nc = Nats.connect("nats://nats:4222");
             JetStream js = nc.jetStream();
             System.out.println("JetStream: " + js.toString());
         }
