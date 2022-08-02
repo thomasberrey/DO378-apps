@@ -18,12 +18,11 @@ while [ $JAEGER_PODMAN_STATUS != "Running" ]
 do
   JAEGER_PODMAN_STATUS=`kubectl get pod $JAEGER_POD_NAME | grep $JAEGER_POD_NAME | awk '{print $3}'`
   DATE=`date`
-  echo "$DATE - JAEGER_PODMAN_STATUS: $JAEGER_PODMAN_STATUS"
+  echo "$DATE - Waiting for Jaeger Query Service to start... Status: $JAEGER_PODMAN_STATUS"
   sleep 5
 done
 
 kubectl port-forward --namespace $NAMESPACE $JAEGER_POD_NAME 8080:16686 &
-curl http://127.0.0.1:8080/
 
 helm uninstall nats
 helm repo add nats https://nats-io.github.io/k8s/helm/charts/
