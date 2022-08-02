@@ -23,6 +23,7 @@ do
 done
 
 kubectl port-forward --namespace $NAMESPACE $JAEGER_POD_NAME 8080:16686 &
+curl http://127.0.0.1:8080/
 
 helm uninstall nats
 helm repo add nats https://nats-io.github.io/k8s/helm/charts/
