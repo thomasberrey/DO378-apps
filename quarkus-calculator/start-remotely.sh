@@ -4,10 +4,8 @@ oc new-project calculator
 oc project calculator
 oc delete all --all
 
-oc delete -f jaeger-resource.yml
 oc apply -f jaeger-resource.yml
 
-oc delete -f activemq-resource.yml
 oc apply -f activemq-resource.yml
 
 helm uninstall nats

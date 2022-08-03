@@ -11,13 +11,13 @@ curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releas
 kubectl create -f https://operatorhub.io/install/elastic-cloud-eck.yaml
 kubectl create -f https://operatorhub.io/install/jaeger.yaml
 
-kubectl delete -f elasticsearch-resource.yml
 kubectl apply -f elasticsearch-resource.yml
 
-kubectl delete -f jaeger-resource.yml
 kubectl apply -f jaeger-resource.yml
 
-
+helm uninstall nats
+helm repo add nats https://nats-io.github.io/k8s/helm/charts/
+helm install nats nats/nats --values nats_ha_and_jetstream.yml
 
 
 
@@ -38,10 +38,6 @@ kubectl apply -f jaeger-resource.yml
 #done
 
 #kubectl port-forward --namespace $NAMESPACE $JAEGER_POD_NAME 8080:16686 &
-
-#helm uninstall nats
-#helm repo add nats https://nats-io.github.io/k8s/helm/charts/
-#helm install nats nats/nats --values nats_ha_and_jetstream.yml
 
 #kubectl port-forward -n kube-system $(kubectl -n kube-system get pods --selector "app.kubernetes.io/name=traefik" --output=name) 9000:9000
 
