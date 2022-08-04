@@ -19,6 +19,11 @@ helm uninstall nats
 helm repo add nats https://nats-io.github.io/k8s/helm/charts/
 helm install nats nats/nats --values nats_ha_and_jetstream.yml
 
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install nginx bitnami/nginx
+
+
+
 
 
 #helm uninstall jaegertracing
