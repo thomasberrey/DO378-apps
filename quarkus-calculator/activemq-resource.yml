@@ -15,7 +15,7 @@ spec:
     managementRBACEnabled: true
     clustered: true
     messageMigration: false
-    persistenceEnabled: false
+    persistenceEnabled: true
     requireLogin: false
     size: 1
     storage:

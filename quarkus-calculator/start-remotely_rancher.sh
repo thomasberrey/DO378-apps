@@ -9,20 +9,25 @@ kubectl delete all --all
 curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.21.2/install.sh | bash -s v0.21.2
 
 kubectl create -f https://operatorhub.io/install/elastic-cloud-eck.yaml
-kubectl create -f https://operatorhub.io/install/jaeger.yaml
-
 kubectl apply -f elasticsearch-resource.yml
 
-kubectl apply -f jaeger-resource.yml
+kubectl create -f https://operatorhub.io/install/jaeger.yaml
+#kubectl apply -f jaeger-resource.yml
+
+helm uninstall activemq-artemis
+helm repo add activemq-artemis https://deviceinsight.github.io/activemq-artemis-helm
+helm install activemq-artemis activemq-artemis/activemq-artemis
 
 helm uninstall nats
 helm repo add nats https://nats-io.github.io/k8s/helm/charts/
 helm install nats nats/nats --values nats_ha_and_jetstream.yml
 
+helm uninstall nginx
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install nginx bitnami/nginx
 
-
+kubectl create -f https://operatorhub.io/install/rabbitmq-cluster-operator.yaml
+kubectl apply -f rabbitmq-resource.yml
 
 
 
