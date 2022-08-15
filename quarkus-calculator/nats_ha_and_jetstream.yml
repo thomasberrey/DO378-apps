@@ -1,6 +1,6 @@
 cluster:
   enabled: true
-  replicas: 3
+  replicas: 2
 nats:
   jetstream:
     enabled: true

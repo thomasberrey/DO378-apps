@@ -1,0 +1,81 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app.quarkus.io/commit-id: 403f3072d15f9f25082ad5367a36405e905fec93
+    app.quarkus.io/build-timestamp: 2022-07-21 - 20:13:26 +0000
+  labels:
+    app.kubernetes.io/name: multiplier
+    app.kubernetes.io/version: 1.0-SNAPSHOT
+  name: multiplier
+spec:
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8082
+  selector:
+    app.kubernetes.io/name: multiplier
+    app.kubernetes.io/version: 1.0-SNAPSHOT
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    app.quarkus.io/commit-id: 403f3072d15f9f25082ad5367a36405e905fec93
+    app.quarkus.io/build-timestamp: 2022-07-21 - 20:13:26 +0000
+  labels:
+    app.kubernetes.io/name: multiplier
+    app.kubernetes.io/version: 1.0-SNAPSHOT
+  name: multiplier
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: multiplier
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+  template:
+    metadata:
+      annotations:
+        app.quarkus.io/commit-id: 403f3072d15f9f25082ad5367a36405e905fec93
+        app.quarkus.io/build-timestamp: 2022-07-21 - 20:13:26 +0000
+      labels:
+        app.kubernetes.io/name: multiplier
+        app.kubernetes.io/version: 1.0-SNAPSHOT
+    spec:
+      containers:
+        - env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          image: quay.io/tberrey/multiplier:latest
+          imagePullPolicy: Always
+          name: multiplier
+          ports:
+            - containerPort: 8082
+              name: http
+              protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    app.quarkus.io/commit-id: 403f3072d15f9f25082ad5367a36405e905fec93
+    app.quarkus.io/build-timestamp: 2022-07-21 - 20:13:26 +0000
+  labels:
+    app.kubernetes.io/name: multiplier
+    app.kubernetes.io/version: 1.0-SNAPSHOT
+  name: multiplier
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: multiplier
+                port:
+                  name: http
+            path: /
+            pathType: Prefix

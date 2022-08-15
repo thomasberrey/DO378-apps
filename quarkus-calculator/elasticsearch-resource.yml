@@ -26,4 +26,4 @@ spec:
                 limits:
                   memory: 4Gi
                   cpu: 2
-      count: 3
+      count: 1
