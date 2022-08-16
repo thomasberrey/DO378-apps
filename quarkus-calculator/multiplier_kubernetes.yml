@@ -70,7 +70,8 @@ metadata:
   name: multiplier
 spec:
   rules:
-    - http:
+    - host: localhost
+      http:
         paths:
           - backend:
               service:

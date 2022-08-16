@@ -70,7 +70,8 @@ metadata:
   name: adder
 spec:
   rules:
-    - http:
+    - host: localhost
+      http:
         paths:
           - backend:
               service:
