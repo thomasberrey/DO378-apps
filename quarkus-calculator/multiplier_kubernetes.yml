@@ -13,7 +13,7 @@ spec:
   ports:
     - name: http
       port: 80
-      targetPort: 8082
+      targetPort: 8080
   selector:
     app.kubernetes.io/name: multiplier
     app.kubernetes.io/version: 1.0-SNAPSHOT
@@ -54,7 +54,7 @@ spec:
           imagePullPolicy: Always
           name: multiplier
           ports:
-            - containerPort: 8082
+            - containerPort: 8080
               name: http
               protocol: TCP
 ---
