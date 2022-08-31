@@ -78,5 +78,5 @@ spec:
                 name: adder
                 port:
                   name: http
-            path: /
+            path: /adder
             pathType: Prefix

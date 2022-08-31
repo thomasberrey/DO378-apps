@@ -78,5 +78,5 @@ spec:
                 name: multiplier
                 port:
                   name: http
-            path: /
+            path: /multiplier
             pathType: Prefix
