@@ -3,5 +3,18 @@ kind: Jaeger
 metadata:
   name: jaeger
 spec:
-  strategy: allinone
+  strategy: production
   storage:
+    type: elasticsearch
+    elasticsearch:
+      nodeCount: 1
+      storage: 
+        storageClassName: 
+        size: 5Gi
+      resources:
+        requests:
+          cpu: 200m
+          memory: 4Gi
+        limits:
+          memory: 4Gi
+      redundancyPolicy: ZeroRedundancy
