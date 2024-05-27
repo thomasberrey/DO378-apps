@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: nginx
 spec:
-  ingressClassName: traefik
+  ingressClassName: nginx
   rules:
   - host: nginx.imis.com
     http:
